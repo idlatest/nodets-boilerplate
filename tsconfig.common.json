@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6", "es7", "es2015", "es2016", "es2017", "es2018", "esnext"],
+    "target": "es2017",
+    "module": "commonjs",
+    "strict": true,
+    "alwaysStrict": true,
+    "diagnostics": true,
+    "disableSizeLimit": true,
+    "esModuleInterop": true,
+    "extendedDiagnostics": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "listEmittedFiles": true,
+    "listFiles": true,
+    "pretty": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
+}

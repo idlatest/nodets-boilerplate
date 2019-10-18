@@ -1,0 +1,25 @@
+{
+  // Server configuration
+  "server": {
+    // Server port
+    "port": 3000
+  },
+
+  // Database configuration
+  "database": {
+    // DB driver
+    "type": "postgres",
+    // DB host
+    "host": "localhost",
+    // DB port
+    "port": 5432,
+    // DB username
+    "username": "postgres",
+    // DB password
+    "password": "postgres",
+    // DB name
+    "database": "nodets",
+    // TypeORM logs
+    "logging": true
+  }
+}
