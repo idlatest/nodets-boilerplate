@@ -2,10 +2,15 @@ import {Entity, Column, PrimaryGeneratedColumn} from 'typeorm'
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id!:number
   
-  @Column()
+  @Column({
+    nullable: false,
+    unique: true
+  })
   email!:string
   
   @Column()
