@@ -1,42 +1,90 @@
-const bcrypt = require('bcrypt')
-import {getRepository} from 'typeorm'
-import {User} from '../../db/entity/User'
+import bcrypt from 'bcrypt'
+import { getRepository } from 'typeorm'
+import { User, UserStatus } from '../../db/entity/User'
+import { AppError } from '../errors/AppError';
 
-export async function createUser (fields:any) {
-  const errors = []
+export async function createUser (fields:any):Promise<User> {
   const userRepo = getRepository(User)
-  const exists = await userRepo.findOne({
-    where: {
-      email: fields.email
+  const user = await userRepo.findOne({
+    where: [
+      { email: fields.email },
+      { username: fields.username }
+    ]
+  })
+
+  return new Promise((resolve, reject) => {
+    if (user) {
+      const matchedField = user.email === fields.email
+        ? 'E-mail'
+        : 'Username'
+      reject(new AppError({
+        message: `${matchedField} is already registered!`,
+        status: 403
+      }))
+    } else {
+      bcrypt.hash(fields.password, 16, (err:any, passhash:any) => {
+        if (err) reject(new AppError({
+          message: 'An unexpected error occured!',
+          status: 403
+        }))
+  
+        userRepo.save(userRepo.create({
+          email: fields.email,
+          username: fields.username,
+          passhash
+        }))
+          .then(user => resolve(user))
+          .catch(err => reject(new AppError({
+            message: 'An unexpected error occured!',
+            status: 403
+          })))
+      })
     }
   })
+}
 
-  if (exists) {
-    errors.push({ message: 'E-mail is already registered!' })
-  }
-
-  const encryptedPassword:any = await new Promise(resolve => {
-    bcrypt.hash(fields.password, 16, (err:any, encrypted:any) => {
-      if (err) resolve(false)
-
-      resolve(encrypted)
-    })
+export async function fetchUserProfile (query:any):Promise<any> {
+  const userRepo = getRepository(User)
+  const user = await userRepo.findOne({
+    where: [
+      { id: query.id },
+      { username: query.username },
+      { email: query.email }
+    ]
   })
 
-  if (!encryptedPassword) {
-    errors.push({ message: 'Server error!' })
-  }
-
-
-  if (errors.length === 0) {
-    const user = await userRepo.save(userRepo.create({
-      email: fields.email,
-      passhash: encryptedPassword
+  return new Promise((resolve, reject) => {
+    if (user) {
+      resolve({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+      })
+    } else reject(new AppError({
+      message: 'User not found!',
+      status: 403
     }))
+  })
+}
+
+export async function deleteUser (fields:any):Promise<User> {
+  const userRepo = getRepository(User)
+  const user = await userRepo.findOne({
+    where: [
+      { id: fields.id },
+      { email: fields.email },
+      { username: fields.username }
+    ]
+  })
+
+  return new Promise((resolve, reject) => {
+    if (user) {
+      user.status = UserStatus.DELETED
   
-    return { user }
-  } else return {
-    user: { email: null },
-    errors
-  }
+      resolve(userRepo.save(user))
+    }
+  
+    reject(new AppError({ message: 'Not found!', status: 404 }))
+  })
 }

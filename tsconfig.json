@@ -1,8 +1,28 @@
 {
-  "extends": "./tsconfig.common.json",
   "compilerOptions": {
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "target": "es2016",
+    "module": "commonjs",
+    "strict": true,
+    "alwaysStrict": true,
+    "diagnostics": true,
+    "disableSizeLimit": true,
+    "esModuleInterop": true,
+    "extendedDiagnostics": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "pretty": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": false,
+    "strictNullChecks": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/config",

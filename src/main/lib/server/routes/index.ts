@@ -1,25 +1,32 @@
+import * as authMw from '../middleware/auth'
 import * as authCtrl from '../controllers/auth'
 import * as userCtrl from '../controllers/user'
 
 export const AppRoutes = [
   {
-    path: "/auth/login",
+    path: "/session",
     method: "post",
-    action: authCtrl.login
+    action: authCtrl.createSession
   },
   {
-    path: "/auth/logout",
-    method: "get",
-    action: authCtrl.logout
+    path: "/session",
+    method: "delete",
+    action: authCtrl.deleteSession
   },
   {
-    path: "/auth/register",
+    path: "/users",
     method: "post",
-    action: authCtrl.register
+    action: userCtrl.registerUser
   },
   {
-    path: "/self",
+    path: "/users/self",
     method: "get",
-    action: userCtrl.self
-  }
+    action: userCtrl.fetchSelf
+  },
+  {
+    path: "/users/:userId",
+    method: "delete",
+    action: userCtrl.deleteUser,
+    middleware: [authMw.isAdmin]
+  },
 ]

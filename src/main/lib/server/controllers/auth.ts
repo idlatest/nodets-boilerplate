@@ -1,17 +1,32 @@
 import {Request, Response} from 'express'
-import * as userService from '../../services/user'
+import * as authService from '../../services/auth'
+import {respond} from '../../respond'
+import { AppError } from '../../errors/AppError'
 
-export async function login (req: Request, res: Response) {
-}
-
-export async function logout (req: Request, res: Response) {
-}
-
-export async function register (req: Request, res: Response) {
-  const { user, errors } = await userService.createUser(req.body)
-
-  res.send({
-    errors,
-    data: user ? user.email : null
+export async function createSession (req: Request, res: Response) {
+  authService.authenticate({
+    email: req.body.email,
+    username: req.body.username,
+    password: req.body.password
   })
+    .then(user => {
+      req.session!.user = user
+      respond(res, 200, null, user.id)
+    })
+    .catch(err => {
+      respond(res, err.getStatus(), [err])
+    })
+}
+
+export async function deleteSession (req: Request, res: Response) {
+  // destroy session
+  if (req.session!.user) {
+    req.session!.destroy((err => {
+      if (err) {
+        return respond(res, 500, [new AppError({ message: 'Server error!', status: 500 })])
+      }
+
+      respond(res, 200, null, null)
+    }))
+  } else respond(res, 403, [new AppError({ message: 'No session to destroy!', status: 403 })])
 }

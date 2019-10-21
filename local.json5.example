@@ -5,9 +5,17 @@
     "port": 3000
   },
 
+  // API configuration
+  "api": {
+    // Prefix
+    "prefix": "api",
+    // Secret (sessions, etc)
+    "secret": "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-="
+  },
+
   // Database configuration
   "database": {
-    // DB driver
+    // DB driver (mysql/postgres)
     "type": "postgres",
     // DB host
     "host": "localhost",
@@ -18,8 +26,24 @@
     // DB password
     "password": "postgres",
     // DB name
-    "database": "nodets",
+    "database": "postgres",
+    // Schema (Postgres-only)
+    "schema": "public",
+    // Charset (MySQL-only)
+    "charset": "UTF8MB4_UNICODE_CI",
+    // Timezone (MySQL-only)
+    "timezone": "local",
     // TypeORM logs
     "logging": true
+  },
+
+  // Redis configuration
+  "redis": {
+    // Connection string (discards host and port)
+    "connStr": null,
+    // Host
+    "host": "localhost",
+    // Port
+    "port": 6379
   }
 }
