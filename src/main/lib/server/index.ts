@@ -1,4 +1,5 @@
 import {Request, Response} from 'express'
+import config = require('config')
 import express = require('express')
 import {AppRoutes} from './routes'
 const app:any = express()
@@ -12,13 +13,14 @@ app.use(session)
 
 // register all application routes
 AppRoutes.forEach(route => {
+  const routePath = `/${config.get('api.prefix')}/${route.path}`.replace(/\/+/g, '/')
   let mw:any[]
 
   if (route.middleware) mw = route.middleware
   else mw = []
   
   app[route.method](
-    route.path,
+    routePath,
     ...mw,
     (req:Request, res:Response, next:Function) => {
       route.action(req, res)

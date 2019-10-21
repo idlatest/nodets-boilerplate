@@ -7,7 +7,7 @@ export async function fetchSelf (req: Request, res: Response) {
     id: req.session!.user.id
   })
     .then(userProfile => {
-      respond(res, 200, userProfile)
+      respond(res, 200, null, userProfile)
     })
     .catch(err => {
       respond(res, err.getStatus(), [err])
