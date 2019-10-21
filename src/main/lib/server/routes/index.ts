@@ -3,6 +3,7 @@ import * as authCtrl from '../controllers/auth'
 import * as userCtrl from '../controllers/user'
 
 export const AppRoutes = [
+  // public routes
   {
     path: "/session",
     method: "post",
@@ -18,15 +19,17 @@ export const AppRoutes = [
     method: "post",
     action: userCtrl.registerUser
   },
+  // guarded routes
   {
     path: "/users/self",
     method: "get",
-    action: userCtrl.fetchSelf
+    action: userCtrl.fetchSelf,
+    middleware: [authMw.hasSession]
   },
   {
     path: "/users/:userId",
     method: "delete",
     action: userCtrl.deleteUser,
-    middleware: [authMw.isAdmin]
+    middleware: [authMw.hasSession, authMw.isAdmin]
   },
 ]

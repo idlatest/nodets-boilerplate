@@ -9,7 +9,8 @@ export enum UserRole {
 export enum UserStatus {
   INACTIVE = 'inactive',
   ACTIVE = 'active',
-  DELETED = 'deleted'
+  DELETED = 'deleted',
+  BLOCKED = 'blocked'
 }
 
 @Entity()

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
-import {getRepository} from 'typeorm'
-import {User} from '../../db/entity/User'
+import { getRepository } from 'typeorm'
+import { User, UserStatus } from '../../db/entity/User'
 import { AppError } from '../errors/AppError';
 
 export async function authenticate (fields:any):Promise<User> {
@@ -14,6 +14,27 @@ export async function authenticate (fields:any):Promise<User> {
 
   return new Promise((resolve, reject) => {
     if (user) {
+      if (user.status === UserStatus.BLOCKED) {
+        return reject(new AppError({
+          message: 'Account is blocked!',
+          status: 403
+        }))
+      }
+
+      if (user.status === UserStatus.DELETED) {
+        return reject(new AppError({
+          message: 'Account is deactivated!',
+          status: 403
+        }))
+      }
+
+      if (user.status === UserStatus.INACTIVE) {
+        return reject(new AppError({
+          message: 'Account is not activated!',
+          status: 403
+        }))
+      }
+
       bcrypt.compare(fields.password || '', user.passhash, (err:any, same:any) => {
         if (err) reject(new AppError({
           message: 'Invalid credentials!',
