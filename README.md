@@ -8,6 +8,11 @@
 - Redis server
 - PostgreSQL server or MySQL server
 
+## Scripts
+- `npm run dev` - Run live with `ts-node`, with live reload over `nodemon`
+- `npm run build` - Build with `tsc`
+- `npm run built` - Run built JS output in `./dist`
+
 ## Routes
 If API prefix is set in configuration, it must be prepended to all routes. E.g. If API prefix is `api`, `/session` becomes `/api/session`
 
