@@ -31,10 +31,6 @@ export async function checkAuth (req:Request, res:Response, next:Function) {
 
 export function isAdmin (req:Request, res:Response, next:Function) {
   const user:User = req.session!.user
-  console.log(
-    user.role === UserRole.ADMIN ||
-    user.role === UserRole.SUPERADMIN
-  )
 
   if (
     user &&
