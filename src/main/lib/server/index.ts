@@ -1,9 +1,8 @@
-import {Request, Response} from 'express'
-import config = require('config')
+import config from 'config'
+import { APP_ROUTES } from './routes'
+import { session } from './session'
 import express = require('express')
-import {AppRoutes} from './routes'
 const app:any = express()
-const session = require('./session')
 
 // register body parser MW
 app.use(express.json())
@@ -12,7 +11,7 @@ app.use(express.json())
 app.use(session)
 
 // register all application routes
-AppRoutes.forEach(route => {
+APP_ROUTES.forEach(route => {
   const routePath = `/${config.get('api.prefix')}/${route.path}`.replace(/\/+/g, '/')
   let mw:any[]
 
@@ -22,11 +21,7 @@ AppRoutes.forEach(route => {
   app[route.method](
     routePath,
     ...mw,
-    (req:Request, res:Response, next:Function) => {
-      route.action(req, res)
-      .then(() => next)
-      .catch(err => next(err))
-    }
+    route.action
   )
 })
 

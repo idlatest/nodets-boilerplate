@@ -1,6 +1,6 @@
 import config from 'config'
-import session from 'express-session'
-const RedisStore = require('connect-redis')(session)
+import expressSession from 'express-session'
+const RedisStore = require('connect-redis')(expressSession)
 import Redis, { RedisOptions } from 'ioredis'
 const redisConnStr:any = config.get('redis.connStr')
 const redisOptions:RedisOptions = {
@@ -11,11 +11,9 @@ const redisClient = redisConnStr
   ? new Redis(redisConnStr)
   : new Redis(redisOptions)
 
-const sessionInstance = session({
+export const session = expressSession({
   store: new RedisStore({ client: redisClient }),
   secret: config.get('api.secret'),
   resave: false,
   saveUninitialized: false
 })
-
-module.exports = sessionInstance

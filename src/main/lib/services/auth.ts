@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { getRepository } from 'typeorm'
 import { User, UserStatus } from '../../db/entity/User'
-import { AppError } from '../errors/AppError';
+import { AppError } from '../errors/AppError'
 
 export async function authenticate (fields:any):Promise<User> {
   const userRepo = getRepository(User)

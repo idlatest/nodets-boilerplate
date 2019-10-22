@@ -2,7 +2,7 @@ import * as authMw from '../middleware/auth'
 import * as authCtrl from '../controllers/auth'
 import * as userCtrl from '../controllers/user'
 
-export const AppRoutes = [
+export const APP_ROUTES = [
   // public routes
   {
     path: "/session",
@@ -24,12 +24,12 @@ export const AppRoutes = [
     path: "/users/self",
     method: "get",
     action: userCtrl.fetchSelf,
-    middleware: [authMw.hasSession]
+    middleware: [authMw.checkAuth]
   },
   {
     path: "/users/:userId",
     method: "delete",
     action: userCtrl.deleteUser,
-    middleware: [authMw.hasSession, authMw.isAdmin]
+    middleware: [authMw.checkAuth, authMw.isAdmin]
   },
 ]
