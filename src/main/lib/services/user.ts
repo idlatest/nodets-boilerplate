@@ -2,13 +2,13 @@ import bcrypt from 'bcrypt'
 import { getRepository } from 'typeorm'
 import { User, UserStatus } from '../../db/entity/User';
 import { AppError } from '../errors/AppError';
+import { RegisterPayload } from '../../../ts/types'
 
-export async function createUser (fields:any):Promise<User> {
+export async function createUser (fields: RegisterPayload):Promise<User> {
   const userRepo = getRepository(User)
   const user = await userRepo.findOne({
     where: [
-      { email: fields.email },
-      { username: fields.username }
+      { email: fields.email }
     ]
   })
 
@@ -29,8 +29,8 @@ export async function createUser (fields:any):Promise<User> {
         }))
   
         userRepo.save(userRepo.create({
+          fullName: fields.fullName,
           email: fields.email,
-          username: fields.username,
           passhash
         }))
           .then(user => resolve(user))
@@ -78,8 +78,7 @@ export async function fetchUserProfile (query:any):Promise<any> {
       resolve({
         id: user.id,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
+        fullName: user.fullName,
       })
     } else reject(new AppError({
       message: 'User not found!',

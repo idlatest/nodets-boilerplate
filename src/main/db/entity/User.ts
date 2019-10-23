@@ -24,20 +24,11 @@ export class User {
   })
   email!:string
 
-  @Column({
-    nullable: true,
-    unique: true
-  })
-  username!:string
-
   @Column()
   passhash!:string
 
-  @Column({ nullable: true })
-  firstName!:string
-
-  @Column({ nullable: true })
-  lastName!:string
+  @Column({ nullable: false })
+  fullName!:string
 
   @Column({
     type: 'enum',

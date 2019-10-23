@@ -17,10 +17,8 @@ export async function fetchSelf (req: Request, res: Response) {
 export async function registerUser (req: Request, res: Response) {
   userService.createUser({
     email: req.body.email,
-    username: req.body.username,
     password: req.body.password,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName
+    fullName: req.body.fullName,
   })
     .then(user => {
       respond(res, 200, null, user.id)

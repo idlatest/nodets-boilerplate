@@ -6,7 +6,6 @@ import { AppError } from '../../errors/AppError'
 export async function createSession (req: Request, res: Response) {
   authService.authenticate({
     email: req.body.email,
-    username: req.body.username,
     password: req.body.password
   })
     .then(user => {
